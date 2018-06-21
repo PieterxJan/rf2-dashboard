@@ -13,11 +13,9 @@
     </head>
     <body class="font-mono">
         <div class="mx-auto w-full max-w-xl mt-10" id="app">
-            <div class="content">
-                @yield('content')
+            <div class="flex h-screen items-center justify-center">
+                <h1>Pushed.</h1>
             </div>
         </div>
-
-        <script src="{{ mix('js/app.js') }}"></script>
     </body>
 </html>

@@ -19,5 +19,9 @@
         "popper.js": "^1.12",
         "tailwindcss": "^0.6.0",
         "vue": "^2.5.7"
+    },
+    "dependencies": {
+        "laravel-echo": "^1.4.0",
+        "pusher-js": "^4.2.2"
     }
 }
