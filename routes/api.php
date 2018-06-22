@@ -13,14 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function() {
-    Route::get('fake', function() {
-        return response()->json(['hello']);
-    });
-
-    Route::get('info', function() {
-        return response()->json(['echte data']);
-    });
+Route::group(['middleware' => 'auth:api', 'prefix' => 'fake'], function() {
+    Route::get('/', 'ApiController@fake');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
