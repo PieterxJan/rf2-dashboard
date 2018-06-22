@@ -12,9 +12,11 @@
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     </head>
     <body class="font-mono">
-        <div class="mx-auto w-full max-w-xl mt-10" id="app">
-            <div class="content">
-                @yield('content')
+        <div class="h-screen w-full flex flex-col" id="app">
+            <h1>@yield('title')</h1>
+            <div class="dashboard content flex-grow">
+                <rf2 position="1 / 1 / span 2 / span 3" val="NewData.SessionTimeLeft"></rf2>
+                <rf2 position="3 / 4 / span 2 / span 3" val="NewData.OpponentsCount"></rf2>
             </div>
         </div>
 

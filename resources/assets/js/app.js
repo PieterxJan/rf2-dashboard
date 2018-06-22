@@ -10,22 +10,24 @@ require('./echo');
 
 window.Vue = require('vue');
 
-Vue.component(
-    'passport-clients',
-    require('./components/passport/Clients.vue')
-);
-
-Vue.component(
-    'passport-authorized-clients',
-    require('./components/passport/AuthorizedClients.vue')
-);
-
-Vue.component(
-    'passport-personal-access-tokens',
-    require('./components/passport/PersonalAccessTokens.vue')
-);
+Vue.component('rf2', require('./components/rf2.vue'));
+Vue.component('grid', require('./components/grid.vue'));
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    created() {
+        this.callApi();
+    },
+    methods: {
+        callApi() {
+            let self = this;
+            axios.get('/api/broadcast')
+                .then(function (response) {
+                    setTimeout(() => {
+                        self.callApi();
+                    }, 1000);
+                });
+        }
+    }
 });
 
