@@ -1,7 +1,9 @@
 <template>
-    <grid :position="position" :color="color">
-        <div>{{ val }}</div>
-        <div v-if="value">{{ value }}</div>
+    <grid :position="position" :color="color" class="flex flex-col border border-black">
+        <div class="bg-black text-white p-2 text-center text-xs">{{ property }}</div>
+        <div class="flex items-center justify-center h-full text-center font-bold">
+            <div v-if="value">{{ value }}</div>
+        </div>
     </grid>
 </template>
 
@@ -21,14 +23,25 @@
                 type: String,
                 default: 'grey',
             },
-            val: {
+            property: {
                 type: String,
                 default: '',
             }
         },
         data () {
             return {
-                value: '',
+                value: ''
+            }
+        },
+        created: function() {
+            this.listen();
+        },
+        methods: {
+            listen() {
+                window.Echo.channel(`dashboard-data`)
+                    .listen('.data-was-fetched', (event) => {
+                        this.value = event.data[this.property];
+                    });
             }
         }
     }

@@ -15,19 +15,40 @@ Vue.component('grid', require('./components/grid.vue'));
 
 const app = new Vue({
     el: '#app',
-    created() {
+    data() {
+        return {
+            keys: [],
+            fetching: false
+        }
+    },
+    mounted() {
+        this.fetchKeys();
         this.callApi();
     },
     methods: {
+        fetchKeys() {
+            this.keys = this.$children.map(child => { return child.property });
+        },
         callApi() {
             let self = this;
-            axios.get('/api/broadcast')
-                .then(function (response) {
+
+            if (this.fetching) {
+                axios.post('/api/broadcast', {
+                    keys: this.keys
+                }).then(function (response) {
                     setTimeout(() => {
                         self.callApi();
-                    }, 1000);
+                    }, 100);
                 });
+            }
         }
-    }
+    },
+    watch: {
+        fetching: function (newVal, oldVal) {
+            if (newVal) {
+                this.callApi();
+            }
+        }
+    },
 });
 

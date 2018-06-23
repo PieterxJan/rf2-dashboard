@@ -1665,6 +1665,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -1681,7 +1683,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             type: String,
             default: 'grey'
         },
-        val: {
+        property: {
             type: String,
             default: ''
         }
@@ -1690,6 +1692,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             value: ''
         };
+    },
+
+    created: function created() {
+        this.listen();
+    },
+    methods: {
+        listen: function listen() {
+            var _this = this;
+
+            window.Echo.channel('dashboard-data').listen('.data-was-fetched', function (event) {
+                _this.value = event.data[_this.property];
+            });
+        }
     }
 });
 
@@ -41400,11 +41415,29 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("grid", { attrs: { position: _vm.position, color: _vm.color } }, [
-    _c("div", [_vm._v(_vm._s(_vm.val))]),
-    _vm._v(" "),
-    _vm.value ? _c("div", [_vm._v(_vm._s(_vm.value))]) : _vm._e()
-  ])
+  return _c(
+    "grid",
+    {
+      staticClass: "flex flex-col border border-black",
+      attrs: { position: _vm.position, color: _vm.color }
+    },
+    [
+      _c(
+        "div",
+        { staticClass: "bg-black text-white p-2 text-center text-xs" },
+        [_vm._v(_vm._s(_vm.property))]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass:
+            "flex items-center justify-center h-full text-center font-bold"
+        },
+        [_vm.value ? _c("div", [_vm._v(_vm._s(_vm.value))]) : _vm._e()]
+      )
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -52462,18 +52495,42 @@ Vue.component('grid', __webpack_require__("./resources/assets/js/components/grid
 
 var app = new Vue({
     el: '#app',
-    created: function created() {
+    data: function data() {
+        return {
+            keys: [],
+            fetching: false
+        };
+    },
+    mounted: function mounted() {
+        this.fetchKeys();
         this.callApi();
     },
 
     methods: {
+        fetchKeys: function fetchKeys() {
+            this.keys = this.$children.map(function (child) {
+                return child.property;
+            });
+        },
         callApi: function callApi() {
             var self = this;
-            axios.get('/api/broadcast').then(function (response) {
-                setTimeout(function () {
-                    self.callApi();
-                }, 1000);
-            });
+
+            if (this.fetching) {
+                axios.post('/api/broadcast', {
+                    keys: this.keys
+                }).then(function (response) {
+                    setTimeout(function () {
+                        self.callApi();
+                    }, 100);
+                });
+            }
+        }
+    },
+    watch: {
+        fetching: function fetching(newVal, oldVal) {
+            if (newVal) {
+                this.callApi();
+            }
         }
     }
 });

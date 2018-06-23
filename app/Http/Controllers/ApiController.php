@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Events\DataWasFetched;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\FetchDashboardDataRequest;
 
 class ApiController extends Controller
 {
-    public function fake()
+    public function broadcast(FetchDashboardDataRequest $request)
     {
+        $keys = $request->keys;
+
         $key = 0;
 
         # Check if there is a key in the cache
@@ -28,7 +32,26 @@ class ApiController extends Controller
         # Cache the last asked key for an hour
         Cache::put('lastKey', $key, 3600);
 
-        # Return the 'fake' file
-        return Storage::get($files[$key]);
+        # Get the json data
+        $data = Storage::get($files[$key]);
+
+        # Convert to an array
+        $items = json_decode($data, true);
+
+        if ($items && is_array($items)) {
+            # Flatten to a dotted collection
+            $items = collect(array_dot($items));
+
+            # Only give back the requested keys
+            $items = $items->filter(function($item, $key) use ($keys) {
+                return in_array($key, $keys);
+            });
+        }
+
+        # Broadcast the event so that the components
+        # can pickup the event and use the data
+        broadcast(new DataWasFetched($items, $files[$key]));
+
+        return response()->json('ok');
     }
 }

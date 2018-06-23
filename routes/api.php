@@ -13,9 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/broadcast', function() {
-    return 'should broadcast the api';
-});
+Route::post('/broadcast', 'ApiController@broadcast');
 
 Route::group(['middleware' => 'auth:api', 'prefix' => 'fake'], function() {
     Route::get('/', 'ApiController@fake');
