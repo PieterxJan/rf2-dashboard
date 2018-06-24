@@ -8,15 +8,13 @@ If you want to set up the dashboard yourself, you can follow the instructions be
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
+There aren't any prerequisites as for now. It uses harvested _fake_ data instead of a realtime API. Once the functionality is ready, you'll need to install [SimHub Dashboard](https://www.racedepartment.com/downloads/simhub-diy-sim-racing-dash.10252/) so that we can use their API.
 
 ### Installing
 
 A step by step series of examples that tell you how to get a development env running
+
+#### Setup project
 
 Clone the project into your projects folder. I, for instance, will use `~/Projects`.
 
@@ -54,6 +52,8 @@ If you now run a local server, it should be accessible. Run the command and navi
 php artisan serve
 ```
 
+#### Pusher
+
 Create a Pusher application and paste in the credentials in the .env file
 
 ```
@@ -68,6 +68,8 @@ Also make sure to change `BROADCAST_DRIVER` to *pusher*
 ```
 BROADCAST_DRIVER=pusher
 ```
+
+#### Passport
 
 Now we need to install and enable Laravel Passport to be able to use the API
 
@@ -89,8 +91,7 @@ Load the user and create a token.
 App\User::find(1)->createToken('API');
 ```
 
-
-End with an example of getting some data out of the system or using it for a little demo
+This should do the trick. If you now push *Start fetching*, the data from the API should start projecting on the dashboard.
 
 ## Todo's
 
