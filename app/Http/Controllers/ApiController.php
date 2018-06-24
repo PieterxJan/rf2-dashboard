@@ -22,7 +22,7 @@ class ApiController extends Controller
         }
 
         # Retrieve all the downloaded files from the storage
-        $files = Storage::files('data');
+        $files = Storage::files('fake');
 
         # If the file does not exist, just start over again
         if (! isset($files[$key])) {
