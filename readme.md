@@ -93,6 +93,16 @@ App\User::find(1)->createToken('API');
 
 This should do the trick. If you now push *Start fetching*, the data from the API should start projecting on the dashboard.
 
+
+
+### Build it yourself
+
+It's possible to alter the dashboard. If you take a look at `resources/views/dashboard.blade.php`, you'll see that there is a reusable Vue component `rf2`. This components has three props:
+
+* **color**: You can pass the color the background of the tile should have. It is based on the colors array in the `tailwind.js` file.
+* **position**: This is the `grid-area` property of the block. It's a CSS Grid property and it will be placed in a 5 by 5 grid.
+* **property**: The property that will be shown in the block. You can find all the available options in one of the files in the `storage/app/fake` directory. Nested elements can be joined with dots (ie `NewData.BestLapOpponent.CarName`)
+
 ## Todo's
 
 - [ ] Get rid of the _fake_ data API
