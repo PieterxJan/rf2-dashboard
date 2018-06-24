@@ -1,60 +1,118 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+# rF2 dashboard
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+This is a dashboard to show semi-realtime telemetry from rFactor 2
 
-## About Laravel
+## Getting Started
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+If you want to set up the dashboard yourself, you can follow the instructions below to setup a local installation of the dashboard.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Prerequisites
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications.
+What things you need to install the software and how to install them
 
-## Learning Laravel
+```
+Give examples
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of any modern web application framework, making it a breeze to get started learning the framework.
+### Installing
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 1100 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+A step by step series of examples that tell you how to get a development env running
 
-## Laravel Sponsors
+Clone the project into your projects folder. I, for instance, will use `~/Projects`.
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell):
+```
+git clone git@github.com:PieterxJan/rf2-dashboard.git ~/Projects/rf2dashboard
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
+Once the code is downloaded, run composer install.
 
-## Contributing
+```
+cd ~/Projects/rf2dashboard && composer install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Copy the `.env.example` to `.env` and fill in the database credentials
 
-## Security Vulnerabilities
+```
+cp .env.example .env
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Generate the application key
+
+```
+php artisan key:generate
+```
+
+Run the migrate command to install the database structure
+
+```
+php artisan migrate
+```
+
+If you now run a local server, it should be accessible. Run the command and navigate to http://127.0.0.1:8000/.
+
+```
+php artisan serve
+```
+
+Create a Pusher application and paste in the credentials in the .env file
+
+```
+PUSHER_APP_ID=
+PUSHER_APP_KEY=
+PUSHER_APP_SECRET=
+PUSHER_APP_CLUSTER=mt1
+```
+
+Also make sure to change `BROADCAST_DRIVER` to *pusher*
+
+```
+BROADCAST_DRIVER=pusher
+```
+
+Now we need to install and enable Laravel Passport to be able to use the API
+
+```
+php artisan passport:install
+```
+
+Before we create a token, we need to register a new user to link it with. Therefore, navigate to */register* and create the user.
+
+When we have created the user, we need to generate an API token. I'll use tinker for this.
+
+```
+php artisan tinker
+```
+
+Load the user and create a token.
+
+```
+App\User::find(1)->createToken('API');
+```
+
+
+End with an example of getting some data out of the system or using it for a little demo
+
+## Todo's
+
+- [ ] Get rid of the _fake_ data API
+- [ ] Read realtime data from the game, instead of using 3rd party
+
+## Deployment
+
+By using Pusher, this can be deployed on a live server, but it still needs a local setup as well to be able to fetch the data from the local API.
+
+## Built With
+
+* [SimHub Dashboard](https://www.racedepartment.com/downloads/simhub-diy-sim-racing-dash.10252/) - Needed as an api
+* [Laravel](https://laravel.com/) - The framework used
+* [Tailwind CSS](https://tailwindcss.com/) - The front end framework used
+* [Vue.js](https://vuejs.org/) - The used javascript framework
+* [Pusher](https://pusher.com/) - Realtime event broadcasting
+
+## Authors
+
+* **Pieter-Jan Claeysens** - [@PieterxJan](https://twitter.com/PieterxJan)
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
