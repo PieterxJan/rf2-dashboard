@@ -52498,6 +52498,7 @@ var app = new Vue({
     data: function data() {
         return {
             keys: [],
+            source: 'fake',
             fetching: false
         };
     },
@@ -52516,12 +52517,14 @@ var app = new Vue({
             var self = this;
 
             if (this.fetching) {
-                axios.post('/api/broadcast', {
+                axios.post('/api/' + this.source, {
                     keys: this.keys
                 }).then(function (response) {
                     setTimeout(function () {
                         self.callApi();
                     }, 100);
+                }).catch(function () {
+                    this.fetching = false;
                 });
             }
         }

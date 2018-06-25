@@ -18,6 +18,7 @@ const app = new Vue({
     data() {
         return {
             keys: [],
+            source: 'fake',
             fetching: false
         }
     },
@@ -33,12 +34,14 @@ const app = new Vue({
             let self = this;
 
             if (this.fetching) {
-                axios.post('/api/broadcast', {
+                axios.post('/api/' + this.source, {
                     keys: this.keys
                 }).then(function (response) {
                     setTimeout(() => {
                         self.callApi();
                     }, 100);
+                }).catch(function() {
+                    this.fetching = false;
                 });
             }
         }

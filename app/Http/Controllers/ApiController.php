@@ -10,7 +10,7 @@ use App\Http\Requests\FetchDashboardDataRequest;
 
 class ApiController extends Controller
 {
-    public function broadcast(FetchDashboardDataRequest $request)
+    public function fake(FetchDashboardDataRequest $request)
     {
         $keys = $request->keys;
 

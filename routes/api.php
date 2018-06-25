@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('/broadcast', 'ApiController@broadcast');
+Route::post('/fake', 'ApiController@fake');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

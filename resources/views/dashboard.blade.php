@@ -14,13 +14,20 @@
     <body class="font-mono">
         <div class="h-screen w-full flex flex-col" id="app">
             <h1>Dashboard</h1>
-            <div class="text-left my-2">
+            <div class="text-left my-2 flex flex-row justify-between">
                 <button
                     @click="fetching = ! fetching"
                     v-bind:class="{ 'bg-green border-green-dark': ! fetching, 'bg-red border-red-dark text-white': fetching, border: true, rounded: true, 'inline-block': true, 'p-2': true }">
                     <span v-if="fetching">Stop fetching</span>
                     <span v-if="! fetching">Start fetching</span>
                 </button>
+                <div class="flex items-center">
+                    <div class="mr-2">Source:</div>
+                    <select class="border w-48" v-model="source">
+                        <option value="fake">Fake</option>
+                        <option value="broadcast">SimHub</option>
+                    </select>
+                </div>
             </div>
             <div class="dashboard content flex-grow relative">
                 <div class="bg-black opacity-75 absolute pin z-10" v-if="! fetching"></div>
